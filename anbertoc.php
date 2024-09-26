@@ -31,11 +31,20 @@ if (!defined('ABSPATH')) {
  */
 define('ANBER_TABLE_OF_CONTENTS_VERSION', '1.0.0');
 
+/**
+ * Includes files
+ */
+require_once plugin_dir_path(__FILE__) . 'includes/anber_toc_setting.php';
+require_once plugin_dir_path(__FILE__) . 'includes/anber_toc_function.php';
+require_once plugin_dir_path(__FILE__) . 'includes/anber-toc-style.php';
+ 
+
+
 // Plugin activation function
-function anber_toc_activate() {
-    echo "Plugin activated!";
-}
-register_activation_hook(__FILE__, 'anber_toc_activate');
+//function anber_toc_activate() {
+//    echo "Plugin activated!";
+//}
+//register_activation_hook(__FILE__, 'anber_toc_activate');
 
 
 // Plugin fontend script/style 
@@ -44,20 +53,18 @@ function anber_table_of_contents_css_and_js_files() {
 }
 add_action('wp_enqueue_scripts', "anber_table_of_contents_css_and_js_files");
 
-// Plugin backend script/style 
+// Plugin backend style 
 function anber_table_of_contents_admin_styles() {
     wp_enqueue_style('atoc_admin_css', plugin_dir_url(__FILE__) . 'assets/css/admin-style.css');
 }
 add_action('admin_enqueue_scripts', 'anber_table_of_contents_admin_styles');
 
-// Plugin backend script/style 
+// Plugin backend script
 function anber_table_of_contents_admin_scripts() {
     wp_enqueue_script('anber_table_of_contents_admin_js', plugin_dir_url(__FILE__) . 'assets/js/admin-scripts.js', array('jquery'), null, true);
 }
 
 add_action('admin_enqueue_scripts', 'anber_table_of_contents_admin_scripts');
-
-// Hook to add settings link beside Deactivate
 
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'anber_table_of_contents_settings_link');
 
@@ -67,12 +74,7 @@ function anber_table_of_contents_settings_link($links) {
     return $links;
 }
 
-/**
- * Includes files
- */
-require_once plugin_dir_path(__FILE__) . 'includes/anber_toc_setting.php';
-require_once plugin_dir_path(__FILE__) . 'includes/anber_toc_function.php';
-require_once plugin_dir_path(__FILE__) . 'includes/anber-toc-style.php';
+
 
 // color-picker Script
 function anber_table_of_contents_enqueue_color_picker() {

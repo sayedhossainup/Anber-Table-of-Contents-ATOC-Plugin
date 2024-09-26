@@ -337,8 +337,7 @@ function atoc_section_shortcode_callback($args) {
  * @param array $args
  */
 function atoc_tabile_title_callback() {
-    $toc_title = get_option('atoc_tabile_title');
-    //echo '<input type="text" id="atoc_tabile_title" name="atoc_tabile_title"' . esc_html_e($toc_title) . ' />';
+    $toc_title = get_option('atoc_tabile_title');   
     echo '<input id="atoc_tabile_title" name="atoc_tabile_title" value="' . esc_html($toc_title) . '" ></input>';
 }
 
@@ -397,10 +396,8 @@ function atoc_field_pill_cb($args) {
 }
 
 function toc_list_icon_select_render() {
-
     // Get the saved icon URL from the database
     $icon_url = get_option('toc_list_icon_setting_field', '');
-
     // Render the input field with the URL and the "Upload" button
     echo '<input type="text" id="toc_list_icon_setting_field" name="toc_list_icon_setting_field" value="' . esc_url($icon_url) . '" style="width: 300px;" />';
     echo '<input type="button" class="button" value="Upload Icon" id="upload_icon_button" />';
@@ -438,8 +435,8 @@ function table_sticky_callback() {
     $tabil_position = get_option('table_sticky_position');
 
     echo '<div class="dflex_item">';
-    echo '<label class="switch" for="table_sticky">Active</label><input type="checkbox" id="table_sticky" name="table_sticky" value="1" ' . esc_attr($checked) . ' /><div class="slider round"></div>';
-    echo '<label class="switch" for="table_sticky_position">Top</label><input type="number" id="table_sticky_position" name="table_sticky_position" value="' . esc_attr($tabil_position) . '" style="width: 100px;" /><label class="switch" for="list_item_devider">px</label>';
+    echo '<label class="atoc-switch" for="table_sticky">Active</label><input type="checkbox" id="table_sticky" name="table_sticky" value="1" ' . esc_attr($checked) . ' /><div class="atc-slider round"></div>';
+    echo '<label class="atoc-switch" for="table_sticky_position">Top Position:</label><input type="number" id="table_sticky_position" name="table_sticky_position" value="' . esc_attr($tabil_position) . '" style="width:100px;" />px';
    
 }
 
@@ -534,8 +531,8 @@ function toc_list_devider_sec_render() {
 
     $devider_styles = ['dashed', 'double', 'dotted', 'solid'];
     echo '<div class="dflex_item">';
-    echo '<label class="switch" for="list_item_devider">Active</label><input type="checkbox" id="list_item_devider" name="list_item_devider" value="1" ' . esc_attr($checked) . ' /><div class="slider round"></div>';
-    echo '<label class="switch" for="list_item_devider">Select Style</label><select id="list_item_devider_style" name="list_item_devider_style">';
+    echo '<label class="atoc-switch" for="list_item_devider">Active</label><input type="checkbox" id="list_item_devider" name="list_item_devider" value="1" ' . esc_attr($checked) . ' /><div class="atc-slider round"></div>';
+    echo '<label class="atoc-switch" for="list_item_devider">Select Style</label><select id="list_item_devider_style" name="list_item_devider_style">';
     foreach ($devider_styles as $devider_style) {
         $selected = ($devider_style === $ds_style) ? 'selected' : '';
         echo '<option value="' . esc_attr($devider_style) . '" ' . $selected . '>' . esc_html($devider_style) . '</option>';
