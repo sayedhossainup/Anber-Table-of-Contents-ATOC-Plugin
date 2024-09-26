@@ -2,27 +2,81 @@
 
 /* Table of Content */
 
-// First, keep the TOC generation function as you wrote it.
-function generate_table_of_contents($content) {
-    if (is_single()) {
-        $toc_title = get_option('atoc_tabile_title');      
-        preg_match_all('/<h([1-6])[^>]*>(.*?)<\/h\1>/', $content, $matches);
-        if ($matches && isset($matches[0]) && count($matches[0]) > 1) {
-            $toc = '<div class="toc_wrapper accordion"><div class="tab"><input type="checkbox" name="accordion-1" id="cb1" checked><label for="cb1" class="tab__label">' . $toc_title . '</label><ul class="tab__content">';
-            foreach ($matches[2] as $index => $heading) {
-                $id = sanitize_title($heading);
-                $toc .= '<li><a class="d-flex gap-3 align-items-center" href="#' . $id . '">' . $heading . '</a></li>';
-                $content = str_replace($matches[0][$index], '<h' . $matches[1][$index] . ' id="' . $id . '">' . $heading . '</h' . $matches[1][$index] . '>', $content);
-            }
-            $toc .= '</ul></div></div>';
-            // Store the table of contents in a global variable for use in the hook
-            global $custom_table_of_contents;
-            $custom_table_of_contents = $toc;
-            return $content;
-        }
-    }
-    return $content;
-}
+function generate_table_of_contents($content) {  
+    if (is_single()) {  
+        $toc_title = get_option('atoc_tabile_title');  
+        preg_match_all('/<h([1-6])[^>]*>(.*?)<\/h\1>/', $content, $matches);  
+        
+        if ($matches && isset($matches[0]) && count($matches[0]) > 1) {  
+            $toc = '<div class="toc_wrapper accordion"><div class="tab"><input type="checkbox" name="accordion-1" id="cb1" checked><label for="cb1" class="tab__label">' . $toc_title . '</label><ul class="tab__content">';  
+
+            // Initialize an empty array to store headings  
+            $heading_array = [];  
+
+            // Organize headings based on their levels  
+            foreach ($matches[2] as $index => $heading) {  
+                $level = intval($matches[1][$index]);  
+                $id = sanitize_title($heading);  
+                
+                // Store the heading and its level  
+                $heading_array[] = [  
+                    'level' => $level,  
+                    'heading' => $heading,  
+                    'id' => $id  
+                ];  
+
+                // Update content to include IDs  
+                $content = str_replace($matches[0][$index], '<h' . $level . ' id="' . $id . '">' . $heading . '</h' . $level . '>', $content);  
+            }  
+
+            // Build the TOC from the heading array  
+            $toc .= build_toc($heading_array);  
+            $toc .= '</ul></div></div>';  
+            
+            // Store the table of contents in a global variable for use in the hook  
+            global $custom_table_of_contents;  
+            $custom_table_of_contents = $toc;  
+            return $content;  
+        }  
+    }  
+    return $content;  
+}  
+
+// Recursive function to build the TOC  
+function build_toc($headings) {  
+    $html = '';  
+    $current_level = 0;  
+    $list_stack = [];  
+
+    foreach ($headings as $heading) {  
+        $level = $heading['level'];  
+        $item = '<li><a class="atoc-item d-flex gap-3 align-items-center" href="#' . $heading['id'] . '">' . $heading['heading'] . '</a></li>';  
+
+        // If we're at a higher level than the current, we need to start a new list  
+        if ($level > $current_level) {  
+            $list_stack[] = $html; // Save the current list  
+            $html = '<ul>'; // Start a new list  
+            $current_level = $level;  
+        }  
+        // If we're at a lower level, we need to close lists  
+        while ($level < $current_level) {  
+            $html .= '</ul></li>'; // Close the current list  
+            $html = array_pop($list_stack) . $html; // Pop the previous list  
+            $current_level--;  
+        }  
+
+        $html .= $item; // Add the item to the current list  
+    }  
+
+    // Close any remaining lists  
+    while ($current_level > 0) {  
+        $html .= '</ul></li>';  
+        $html = array_pop($list_stack) . $html;  
+        $current_level--;  
+    }  
+
+    return $html;  
+}  
 
 add_filter('the_content', 'generate_table_of_contents');
 
