@@ -4,7 +4,13 @@
 
 function generate_table_of_contents($content) {  
     if (is_single()) {  
-        $toc_title = get_option('atoc_tabile_title');  
+        $toc_title = get_option('atoc_tabile_title'); 
+        
+        $exclud_tag = get_option('exclude_tag_multiselect'); 
+        
+        //var_dump($exclud_tag);
+        
+        // Regex to capture headings  
         preg_match_all('/<h([1-6])[^>]*>(.*?)<\/h\1>/', $content, $matches);  
         
         if ($matches && isset($matches[0]) && count($matches[0]) > 1) {  
@@ -13,9 +19,19 @@ function generate_table_of_contents($content) {
             // Initialize an empty array to store headings  
             $heading_array = [];  
 
+            // Define which heading levels to exclude (in this case, h4 should be excluded)  
+            $excluded_levels = $exclud_tag; // You can add more levels to ignore (e.g., [4, 5])  
+
+            var_dump($excluded_levels);
             // Organize headings based on their levels  
             foreach ($matches[2] as $index => $heading) {  
                 $level = intval($matches[1][$index]);  
+
+                // Check if the heading level is excluded  
+                if (in_array($level, $excluded_levels)) {  
+                    continue; // Skip this heading  
+                }  
+
                 $id = sanitize_title($heading);  
                 
                 // Store the heading and its level  
@@ -25,7 +41,7 @@ function generate_table_of_contents($content) {
                     'id' => $id  
                 ];  
 
-                // Update content to include IDs  
+                // Update content to include IDs, only for included headings  
                 $content = str_replace($matches[0][$index], '<h' . $level . ' id="' . $id . '">' . $heading . '</h' . $level . '>', $content);  
             }  
 
@@ -55,7 +71,7 @@ function build_toc($headings) {
         // If we're at a higher level than the current, we need to start a new list  
         if ($level > $current_level) {  
             $list_stack[] = $html; // Save the current list  
-            $html = '<ul>'; // Start a new list  
+            $html = '<ul class="level'.$current_level.'">'; // Start a new list  
             $current_level = $level;  
         }  
         // If we're at a lower level, we need to close lists  

@@ -75,3 +75,13 @@ ul.tab__content li a{
 ul.tab__content a:focus {
     outline: none;
 }
+
+ul.level0 {
+    padding: 0;
+}
+ul.level2 li {
+    list-style: lower-alpha; 
+}
+ul.level3 li {
+    list-style:lower-roman;
+}

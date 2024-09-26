@@ -50,6 +50,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/anber-toc-style.php';
 // Plugin fontend script/style 
 function anber_table_of_contents_css_and_js_files() {
     wp_enqueue_style('anber-toc-stylesheet', plugins_url('assets/css/toc-style.css', __FILE__));
+    wp_enqueue_script('anber_table_of_contents_admin_js', plugin_dir_url(__FILE__) . 'assets/js/admin-scripts.js', array('jquery'), null, true);
 }
 add_action('wp_enqueue_scripts', "anber_table_of_contents_css_and_js_files");
 

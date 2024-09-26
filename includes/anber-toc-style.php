@@ -35,10 +35,10 @@ function anber_dynamic_styles() {
     $item_font_size_unit = get_option('toc_item_font_size_unit', 'px');
     $item_font_size = $item_font_size_value . $item_font_size_unit;
 
-    $ul_padding_top = get_option('toc_list_padding_top_value', '10') . get_option('toc_list_padding_unit', 'px');
-    $ul_padding_right = get_option('toc_list_padding_right_value', '10') . get_option('toc_list_padding_unit', 'px');
-    $ul_padding_bottom = get_option('toc_list_padding_bottom_value', '10') . get_option('toc_list_padding_unit', 'px');
-    $ul_padding_left = get_option('toc_list_padding_left_value', '10') . get_option('toc_list_padding_unit', 'px');
+    $ul_padding_top = get_option('toc_list_padding_top_value', '0') . get_option('toc_list_padding_unit', 'px');
+    $ul_padding_right = get_option('toc_list_padding_right_value', '0') . get_option('toc_list_padding_unit', 'px');
+    $ul_padding_bottom = get_option('toc_list_padding_bottom_value', '0') . get_option('toc_list_padding_unit', 'px');
+    $ul_padding_left = get_option('toc_list_padding_left_value', '20') . get_option('toc_list_padding_unit', 'px');
     $ul_padding = $ul_padding_top . ' ' . $ul_padding_right . ' ' . $ul_padding_bottom . ' ' . $ul_padding_left;
 
     $li_pad_top_value = get_option('list_item_padding_top_value', '10') . get_option('list_item_padding_unit_value', 'px');

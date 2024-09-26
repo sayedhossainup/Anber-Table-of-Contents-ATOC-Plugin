@@ -108,6 +108,14 @@ function atoc_settings_init() {
         'sanitize_callback' => 'sanitize_multiselect_input',
         'default' => array(),
     ));
+    
+     // Register the exclude tag setting as an array
+    register_setting('atoc', 'exclude_tag_multiselect', array(
+        'type' => 'array', // Store multiple selections as an array
+        'sanitize_callback' => 'sanitize_multiselect_exclude_tag',
+        'default' => array(),
+    ));
+
 
     // Style Tab
     register_setting('atoc_style', 'table_background_color');
@@ -196,6 +204,15 @@ function atoc_settings_init() {
             'placementoftabl_multiselect',
             'Placement of Table (Multiselect)',
             'placementoftabl_multiselect_callback',
+            'atoc',
+            'atoc_section_developers'
+    );
+    
+    // Register a new field for exclude_tag multiselect in the "General Tab" section.
+    add_settings_field(
+            'exclude_tag_multiselect',
+            'Exclude Tag from Table (Multiselect)',
+            'exclude_tag_multiselect_callback',
             'atoc',
             'atoc_section_developers'
     );
@@ -376,24 +393,43 @@ function sanitize_multiselect_input($input) {
     return array();
 }
 
-function atoc_field_pill_cb($args) {
-    // Get the value of the setting we've registered with register_setting()
-    $options = get_option('atoc_options');
-    ?>
-    <select
-        id="<?php echo esc_attr($args['label_for']); ?>"
-        data-custom="<?php echo esc_attr($args['atoc_custom_data']); ?>"
-        name="atoc_options[<?php echo esc_attr($args['label_for']); ?>]">
-        <option value="red" <?php echo isset($options[$args['label_for']]) ? ( selected($options[$args['label_for']], 'red', false) ) : ( '' ); ?>>
-            <?php esc_html_e('red pill', 'atoc'); ?>
-        </option>
-        <option value="blue" <?php echo isset($options[$args['label_for']]) ? ( selected($options[$args['label_for']], 'blue', false) ) : ( '' ); ?>>
-            <?php esc_html_e('blue pill', 'atoc'); ?>
-        </option>
-    </select>
 
-    <?php
+// Callback to render the checkboxes
+function exclude_tag_multiselect_callback() {
+    // Retrieve the stored values (as an array)
+    $selected_values = get_option('exclude_tag_multiselect', array());
+
+    // Define the options for the checkboxes
+    $options = array(
+        '1' => 'h1',
+        '2' => 'h2',
+        '3' => 'h3',
+        '4' => 'h4',
+        '5' => 'h5',
+        '6' => 'h6',
+    );
+    echo '<p class="description">Select H Tag  to remove from the table of contents.</p>';
+    // Display the checkboxes
+    foreach ($options as $value => $label) {
+        $checked = in_array($value, (array) $selected_values) ? 'checked="checked"' : '';
+        echo '<label><input type="checkbox" name="exclude_tag_multiselect[]" value="' . esc_attr($value) . '" ' . $checked . '>' . esc_html($label) . '</label><br>';
+    }
+
+
+   
 }
+
+// Sanitize the checkbox input to ensure it's saved properly as an array
+function sanitize_multiselect_exclude_tag($input) {
+    // Ensure the input is an array and sanitize each value
+    if (is_array($input)) {
+        return array_map('sanitize_text_field', $input);
+    }
+    return array();
+}
+
+
+
 
 function toc_list_icon_select_render() {
     // Get the saved icon URL from the database
