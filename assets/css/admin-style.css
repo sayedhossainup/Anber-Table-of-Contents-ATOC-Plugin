@@ -2,7 +2,10 @@
 section#wrapper {
     padding: 60px;
 }
-
+.my-15{margin-top: 15px; margin-bottom: 15px;}
+.itemwrap lable {
+    margin-right: 10px;
+}
 /* Tabs menu */
 .tabs {
     margin: 0;

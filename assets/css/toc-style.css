@@ -1,6 +1,8 @@
 /* Core styles/functionality */
+
 .toc_wrapper {
     margin-bottom: 30px;
+    z-index: 1;
 }
 .tab input {
     position: absolute;

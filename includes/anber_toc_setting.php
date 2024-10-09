@@ -221,46 +221,20 @@ function atoc_settings_init() {
 
     add_settings_field(
             'table_width',
-            'Table Width',
+            'Wrapper Style',
             'table_width_setting_callback',
             'atoc_style',
             'atoc_section_style'
     );
-    add_settings_field(
-            'table_padding',
-            'Table Padding Settings',
-            'table_padding_setting_callback',
-            'atoc_style',
-            'atoc_section_style'
-    );
-    add_settings_field(
-            'table_border_radius',
-            'Table border radius Settings',
-            'table_border_radius_callback',
-            'atoc_style',
-            'atoc_section_style'
-    );
-    add_settings_field(
-            'table_background_color',
-            'Table Background Color',
-            'table_background_color_setting_callback',
-            'atoc_style',
-            'atoc_section_style'
-    );
+
     add_settings_field(
             'toc_font_size',
-            'Table header Font Size',
+            'Header Style',
             'toc_font_size_setting_callback',
             'atoc_style',
             'atoc_section_style'
     );
-    add_settings_field(
-            'toc_title_color',
-            'Table header Color',
-            'toc_title_color_setting_callback',
-            'atoc_style',
-            'atoc_section_style'
-    );
+
     add_settings_field(
             'table_sticky',
             'Make Table Sticky',
@@ -551,13 +525,11 @@ function toc_list_padding_callback() {
 }
 
 function table_background_color_setting_callback() {
-    $color = get_option('table_background_color', '#ddd'); // Default color
-    echo '<input type="text" id="table_background_color" name="table_background_color" value="' . esc_attr($color) . '" class="table_color" />';
+    
 }
 
 function toc_title_color_setting_callback() {
-    $color = get_option('toc_title_color', '#000'); // Default color
-    echo '<input type="text" id="toc_title_color" name="toc_title_color" value="' . esc_attr($color) . '" class="table_color" />';
+   
 }
 
 function toc_list_devider_sec_render() {
@@ -608,6 +580,7 @@ function toc_font_size_setting_callback() {
     $units = ['px', '%', 'em', 'rem'];
 
     // Display the input for font size
+    echo '<div class="itemwrap"><lable>Font Size</lable>';
     echo '<input type="number" id="toc_font_size_value" name="toc_font_size_value" value="' . esc_attr(rtrim($font_size_value, 'px%emrem')) . '" style="width: 80px;" />';
 
     // Display the select for units
@@ -618,6 +591,11 @@ function toc_font_size_setting_callback() {
     }
     echo '</select>';
     echo '<label style="margin-left: 20px;">Font Weight:</label> <input type="number" id="toc_font_font_weight" name="toc_font_font_weight" value="' . esc_attr(rtrim($toc_font_width, '')) . '" style="width: 80px;" />';
+    echo '</div>';
+    
+    echo '<div class="itemwrap my-15"><lable>Color</lable>'; $color = get_option('toc_title_color', '#000'); // Default color
+    echo '<input type="text" id="toc_title_color" name="toc_title_color" value="' . esc_attr($color) . '" class="table_color" />';
+    echo '</div>';
 }
 
 function table_width_setting_callback() {
@@ -627,6 +605,7 @@ function table_width_setting_callback() {
     $units = ['px', '%'];
 
     // Display the input for font size
+     echo '<div class="itemwrap my-15"><lable>Width</lable>';
     echo '<input type="text" id="table_width_valu" name="table_width_valu" value="' . esc_attr(rtrim($table_width_value, 'px%')) . '" style="width: 150px;" />';
 
     // Display the select for units
@@ -635,11 +614,9 @@ function table_width_setting_callback() {
         $selected = ($unit === $table_width_unit) ? 'selected' : '';
         echo '<option value="' . esc_attr($unit) . '" ' . $selected . '>' . esc_html($unit) . '</option>';
     }
-    echo '</select>';
-}
-
-function table_padding_setting_callback() {
-    // Get the saved values for padding
+    echo '</select></div>';
+    
+     // Get the saved values for padding
     $padding_top_value = get_option('table_padding_top_value', '10');
     $padding_right_value = get_option('table_padding_right_value', '10');
     $padding_bottom_value = get_option('table_padding_bottom_value', '10');
@@ -649,7 +626,7 @@ function table_padding_setting_callback() {
     // Define the units
     $units = ['px', '%', 'em', 'rem'];
     // Display padding top input
-    echo '<div>';
+    echo '<div class="itemwrap my-15"><lable>Padding</lable>';
     echo '<input type="number" id="table_padding_top_value" name="table_padding_top_value" value="' . esc_attr($padding_top_value) . '" style="width: 80px;" />';
     echo '<input type="number" id="table_padding_right_value" name="table_padding_right_value" value="' . esc_attr($padding_right_value) . '" style="width: 80px;" />';
     echo '<input type="number" id="table_padding_bottom_value" name="table_padding_bottom_value" value="' . esc_attr($padding_bottom_value) . '" style="width: 80px;" />';
@@ -660,23 +637,15 @@ function table_padding_setting_callback() {
         echo '<option value="' . esc_attr($unit) . '" ' . $selected . '>' . esc_html($unit) . '</option>';
     }
     echo '</select></div>';
-}
-
-function table_border_radius_callback() {
-    // Get the saved values for padding
+    
+    // Get the saved values for border_radius
     $br_top_value = get_option('table_border_radius_top_value', '10');
     $br_right_value = get_option('table_border_radius_right_value', '10');
     $br_bottom_value = get_option('table_border_radius_bottom_value', '10');
-    $br_left_value = get_option('table_border_radius_left_value', '10');
-
-    // Get the saved units for padding
-    $br_top_unit = get_option('table_border_radius_unit', 'px');
-
-    // Define the units
+    $br_left_value = get_option('table_border_radius_left_value', '10');   
+    $br_top_unit = get_option('table_border_radius_unit', 'px');    
     $units = ['px', '%', 'em', 'rem'];
-
-    // Display padding top input
-    echo '<div>';
+     echo '<div class="itemwrap my-15"><lable>Border radius</lable>';
     echo '<input type="number" id="table_border_radius_top_value" name="table_border_radius_top_value" value="' . esc_attr($br_top_value) . '" style="width: 50px;" />';
     echo '<input type="number" id="table_border_radius_right_value" name="table_border_radius_right_value" value="' . esc_attr($br_right_value) . '" style="width: 50px;" />';
     echo '<input type="number" id="table_border_radius_bottom_value" name="table_border_radius_bottom_value" value="' . esc_attr($br_bottom_value) . '" style="width: 50px;" />';
@@ -687,4 +656,11 @@ function table_border_radius_callback() {
         echo '<option value="' . esc_attr($unit) . '" ' . $selected . '>' . esc_html($unit) . '</option>';
     }
     echo '</select></div>';
+    
+     // Get the saved values for background_color
+    $color = get_option('table_background_color', '#ddd'); // Default color
+    echo '<div class="itemwrap my-15"><lable>Background color</lable>'; 
+    echo '<input type="text" id="table_background_color" name="table_background_color" value="' . esc_attr($color) . '" class="table_color" />';
+    echo '</div>';
 }
+
